@@ -20,10 +20,10 @@ function updateDisplayValues() {
   
   if (aircraftOne.checked) {
     if (enteredNumber < 17.2) {
-      const dividedValue = (enteredNumber / 2).toFixed(2);
+      const dividedValue = enteredNumber / 2;
       const roundedValue = roundDecimalPart(dividedValue);
-      display1.value = (roundedValue + 0.1).toFixed(1);
-      display2.value = roundedValue.toFixed(1);
+      display1.value = roundedValue.toFixed(1);
+      display2.value = (roundedValue - 0.1).toFixed(1);
       display3.value = 0;
     } else {
       display1.value = NON_MAX_AC;
@@ -34,8 +34,8 @@ function updateDisplayValues() {
     if (enteredNumber < 17.0) {
       const dividedValue = enteredNumber / 2;
       const roundedValue = roundDecimalPart(dividedValue);
-      display1.value = (roundedValue + 0.1).toFixed(1);
-      display2.value = roundedValue.toFixed(1);
+      display1.value = roundedValue.toFixed(1);
+      display2.value = (roundedValue - 0.1).toFixed(1);
       display3.value = 0;
     } else {
       display1.value = MAX_800_AC;
