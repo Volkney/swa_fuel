@@ -7,24 +7,30 @@
     <title>Document</title>
 </head>
 <body>
-    <form id="numberForm">
-        Enter a Fuel Amount: <input type="number" id="inputNumber" min="0" step="0.1">
-    </form>
-    <form>
-        <fieldset>
-            <legend>Type of Aircraft</legend>
-            <div id="group1">
-                <input type="radio" value="val1" name="group1" checked> 700, 800
-                <input type="radio" value="val2" name="group1"> 800 Max
-            </div>
-        </fieldset>
-    </form>
 
-      <h2>Fuel Distribution</h2>
-      <input type="text" id="display1" disabled>
-      <input type="text" id="display2" disabled>
-      <input type="text" id="display3" disabled>
-
+    <div class="flex-container">
+        <form id="numberForm">
+            Enter a Fuel Amount: <input type="number" id="inputNumber" min="0" step="0.1">
+        </form>
+        <form>
+            <fieldset>
+                <legend>Type of Aircraft</legend>
+                <div id="group1">
+                    <input type="radio" value="val1" name="group1" checked> 700, 800
+                    <input type="radio" value="val2" name="group1"> 800 Max
+                </div>
+            </fieldset>
+        </form>
+        <form>
+            <h2>Fuel Distribution</h2>
+            <input type="text" id="display1" disabled>
+            <input type="text" id="display2" disabled>
+            <input type="text" id="display3" disabled>
+        </form>
+          
+    
+    </div>
+    
 </body>
 <script src="script.js"></script>
 </html>
