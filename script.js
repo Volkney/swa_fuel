@@ -8,22 +8,14 @@ const NON_MAX_AC = 8.6;
 var aircraftOne = aircraft[0];
 var aircraftTwo = aircraft[1];
 
-function roundDecimalPart(value) {
-  const integerPart = Math.floor(value);
-  const decimalPart = value - integerPart;
-  const roundedDecimal = parseFloat(decimalPart.toFixed(1));
-  return integerPart + roundedDecimal;
-}
-
 function updateDisplayValues() {
   const enteredNumber = parseFloat(inputNumber.value);
   
   if (aircraftOne.checked) {
     if (enteredNumber < 17.2) {
       const dividedValue = enteredNumber / 2;
-      const roundedValue = roundDecimalPart(dividedValue);
-      display1.value = roundedValue.toFixed(1);
-      display2.value = (roundedValue - 0.1).toFixed(1);
+      display1.value = (Math.ceil(dividedValue * 10) / 10).toFixed(1);
+      display2.value = (Math.floor(dividedValue * 10) / 10).toFixed(1);
       display3.value = 0;
     } else {
       display1.value = NON_MAX_AC;
@@ -33,9 +25,8 @@ function updateDisplayValues() {
   } else if (aircraftTwo.checked) {
     if (enteredNumber < 17.0) {
       const dividedValue = enteredNumber / 2;
-      const roundedValue = roundDecimalPart(dividedValue);
-      display1.value = roundedValue.toFixed(1);
-      display2.value = (roundedValue - 0.1).toFixed(1);
+      display1.value = (Math.ceil(dividedValue * 10) / 10).toFixed(1);
+      display2.value = (Math.floor(dividedValue * 10) / 10).toFixed(1);
       display3.value = 0;
     } else {
       display1.value = MAX_800_AC;
