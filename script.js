@@ -39,3 +39,42 @@ function updateDisplayValues() {
 inputNumber.addEventListener('input', updateDisplayValues);
 aircraftOne.addEventListener('change', updateDisplayValues);
 aircraftTwo.addEventListener('change', updateDisplayValues);
+
+
+// Calculator Code
+
+const fuelOnBoardInput = document.getElementById('fuelOnBoard');
+const fuelInInput = document.getElementById('fuelIn');
+const fuelDensityInput = document.getElementById('fuelDensity');
+const calculateButton = document.getElementById('calculateButton');
+const fuelResult = document.getElementById('fuelResult');
+
+calculateButton.addEventListener('click', () => {
+    const fuelOnBoard = parseFloat(fuelOnBoardInput.value);
+    const fuelIn = parseFloat(fuelInInput.value);
+    const fuelDensity = parseFloat(fuelDensityInput.value);
+
+    if (!isNaN(fuelOnBoard) && !isNaN(fuelIn) && !isNaN(fuelDensity) && fuelDensity !== 0) {
+        const calculatedFuel = (fuelOnBoard - fuelIn) / fuelDensity;
+        fuelResult.textContent = `Calculated Fuel: ${calculatedFuel.toFixed(2)}`;
+    } else {
+        fuelResult.textContent = 'Please enter valid values.';
+    }
+
+});
+
+
+// Tab functionality 
+
+// Function to switch between tabs
+function openTab(evt, tabName) {
+  const tabContents = document.getElementsByClassName("tab-content");
+  for (let i = 0; i < tabContents.length; i++) {
+      tabContents[i].style.display = "none";
+  }
+  
+  document.getElementById(tabName).style.display = "block";
+}
+
+// Initially show the first tab
+document.getElementById("FuelDistribution").style.display = "block";
