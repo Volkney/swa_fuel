@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./air-fuel.ico">
     <link rel="stylesheet" href="stylo.css">
     <title>Fuel Calculator</title>
 </head>
@@ -14,6 +15,7 @@
 
     <div id="FuelDistribution" class="tab-content">
         <!-- Fuel Distribution content here -->
+        <div class="flex-container">
             <form id="numberForm">
                 Enter a Fuel Amount: <input type="number" id="inputNumber" min="0" step="0.1" inputmode="decimal">
             </form>
@@ -32,20 +34,24 @@
                 <input type="text" id="display2" disabled>
                 <input type="text" id="display3" disabled>
             </form>
+        </div>
+    </div>
 
     <div id="FuelCalculator" class="tab-content">
         <!-- Fuel Calculator content here -->
-        <form id="fuelCalculatorForm">
-            <h2>Fuel Calculator</h2>
-            <label for="fuelOnBoard">Fuel on Board:</label>
-            <input type="number" id="fuelOnBoard" min="0" step="0.1" inputmode="decimal">
-            <label for="fuelIn">Fuel In:</label>
-            <input type="number" id="fuelIn" min="0" step="0.1" inputmode="decimal">
-            <label for="fuelDensity">Fuel Density:</label>
-            <input type="number" id="fuelDensity" min="0" step="0.001" inputmode="decimal">
-            <button id="calculateButton">Calculate</button>
-            <p id="fuelResult"></p>
-        </form>
+        <div class="flex-container">
+            <form id="fuelCalculatorForm">
+                <h2>Fuel Calculator</h2>
+                <label for="fuelOnBoard">Fuel on Board:</label>
+                <input type="number" id="fuelOnBoard" min="0" step="0.1" inputmode="decimal">
+                <label for="fuelIn">Fuel In:</label>
+                <input type="number" id="fuelIn" min="0" step="0.1" inputmode="decimal">
+                <label for="fuelDensity">Fuel Density:</label>
+                <input type="number" id="fuelDensity" min="0" step="0.001" inputmode="decimal">
+                <button id="calculateButton">Calculate</button>
+                <p id="fuelResult"></p>
+            </form>
+        </div>
     </div>
 
     <script src="script.js"></script>
