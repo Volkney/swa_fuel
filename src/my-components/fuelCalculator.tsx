@@ -41,15 +41,15 @@ export const FuelCalculator: FC<FuelCalculatorProps> = ({
       <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 w-full justify-center mt-4'>
         <div className='flex flex-col items-center justify-center p-4 bg-background rounded-md shadow-md'>
           <span className='text-4xl font-bold'>{display1}</span>
-          <span className='text-sm text-muted-foreground'>Display 1</span>
+          <span className='text-sm text-muted-foreground'>ONE</span>
         </div>
         <div className='flex flex-col items-center justify-center p-4 bg-background rounded-md shadow-md'>
           <span className='text-4xl font-bold'>{display2}</span>
-          <span className='text-sm text-muted-foreground'>Display 2</span>
+          <span className='text-sm text-muted-foreground'>TWO</span>
         </div>
         <div className='flex flex-col items-center justify-center p-4 bg-background rounded-md shadow-md'>
           <span className='text-4xl font-bold'>{display3}</span>
-          <span className='text-sm text-muted-foreground'>Display 3</span>
+          <span className='text-sm text-muted-foreground'>CENTER</span>
         </div>
       </div>
     </div>

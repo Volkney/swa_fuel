@@ -1,0 +1,31 @@
+{
+    "manifest_version": 3,
+    "name": "Fuel Calculator",
+    "version": "1.0.0",
+    "description": "A simple fuel calculator extension",
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "background"
+    ],
+    "host_permission": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "tank-truck": "tank-truck.png"
+        }
+    }
+}

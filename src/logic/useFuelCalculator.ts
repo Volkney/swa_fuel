@@ -2,7 +2,7 @@ import { useState, ChangeEvent } from 'react';
 
 export function useFuelCalculator() {
   const [fuelInput, setFuelInput] = useState<string>('');
-  const [aircraftType, setAircraftType] = useState<'aircraftOne' | 'aircraftTwo'>('aircraftOne');
+  const [aircraftType, setAircraftType] = useState<'Non-Max' | 'MAX'>('MAX');
   const [display1, setDisplay1] = useState<number>(0);
   const [display2, setDisplay2] = useState<number>(0);
   const [display3, setDisplay3] = useState<number>(0);
@@ -23,7 +23,7 @@ export function useFuelCalculator() {
       return;
     }
 
-    if (aircraftType === 'aircraftOne') {
+    if (aircraftType === 'Non-Max') {
       if (enteredNumber < 17200) {
         const dividedValue = enteredNumber / 2;
         setDisplay1(Math.ceil(dividedValue));
@@ -34,7 +34,7 @@ export function useFuelCalculator() {
         setDisplay2(NON_MAX_AC);
         setDisplay3(enteredNumber - (NON_MAX_AC + NON_MAX_AC));
       }
-    } else if (aircraftType === 'aircraftTwo') {
+    } else if (aircraftType === 'MAX') {
       if (enteredNumber < 17000) {
         const dividedValue = enteredNumber / 2;
         setDisplay1(Math.ceil(dividedValue));
@@ -52,6 +52,7 @@ export function useFuelCalculator() {
     fuelInput,
     handleFuelInputChange,
     aircraftType,
+    setAircraftType, 
     calculateFuelValues,
     display1,
     display2,
