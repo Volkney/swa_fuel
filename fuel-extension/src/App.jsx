@@ -1,9 +1,16 @@
-import './App.css'
+import FuelCalculator from './logic/fuel-calculation'; // Adjust the path as necessary
 
-export default function App() {
+function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-  )
+    <div className="App">
+      <header className="App-header">
+        <h1>Fuel Ticket Extension</h1>
+      </header>
+      <main>
+        <FuelCalculator />
+      </main>
+    </div>
+  );
 }
+
+export default App;
