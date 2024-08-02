@@ -79,21 +79,74 @@ const FuelCalculator = () => {
   };
 
   return (
-    <div>
-      <h2>Fuel Calculator</h2>
-      <p>Date: {dateData}</p>
-      <p>Flight: {flightData.number} ({flightData.origin} - {flightData.destination})</p>
-      <p>Gate: {gateNumber}</p>
-      <p>Aircraft Type: {aircraftData.type}</p>
-      <p>Aircraft Registry: {aircraftData.registry}</p>
-      <p>Current Fuel Type: {useMaxFuel ? 'Max Fuel' : 'Min Fuel'}</p>
-      <p>Fuel Amount: {useMaxFuel ? fuelData.maxFuel : fuelData.minFuel}</p>
-      <button onClick={toggleFuelType}>
-        Toggle to {useMaxFuel ? 'Min Fuel' : 'Max Fuel'}
-      </button>
-      <p>Display 1: {calculatedValues.display1}</p>
-      <p>Display 2: {calculatedValues.display2}</p>
-      <p>Display 3: {calculatedValues.display3}</p>
+    <div className="w-full min-w-[300px] max-w-[600px] p-4 bg-gray-100">
+      <h2 className="text-2xl font-bold mb-4">Fuel Calculator</h2>
+      
+      {/* Row with 4 columns */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+        <div className="bg-blue-200 p-2 rounded">
+          <p className="font-semibold">Station</p>
+          <p>{flightData.origin}</p>
+        </div>
+        <div className="bg-green-200 p-2 rounded">
+          <p className="font-semibold">Flight #</p>
+          <p>{flightData.number}</p>
+        </div>
+        <div className="bg-yellow-200 p-2 rounded">
+          <p className="font-semibold">Aircraft</p>
+          <p>{aircraftData.registry}</p>
+        </div>
+        <div className="bg-red-200 p-2 rounded">
+          <p className="font-semibold">Date</p>
+          <p>{dateData}</p>
+        </div>
+      </div>
+
+      {/* Row with 2 columns */}
+      <div className="grid grid-cols-2 gap-2 mb-4">
+        <div className="bg-purple-200 p-2 rounded">
+          <p className="font-semibold">Min Fuel</p>
+          <p>{fuelData.minFuel}</p>
+        </div>
+        <div className="bg-indigo-200 p-2 rounded">
+          <p className="font-semibold">Max Fuel</p>
+          <p>{fuelData.maxFuel}</p>
+        </div>
+      </div>
+
+      {/* Column with 5 rows */}
+      <div className="grid grid-cols-1 gap-2 mb-4">
+        <div className="bg-gray-200 p-2 rounded">
+          <button 
+            onClick={toggleFuelType}
+            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          >
+            Toggle to {useMaxFuel ? 'Min Fuel' : 'Max Fuel'}
+          </button>
+        </div>
+        <div className="bg-gray-200 p-2 rounded">
+          <p className="font-semibold">Display 1</p>
+          <p>{calculatedValues.display1}</p>
+        </div>
+        <div className="bg-gray-200 p-2 rounded">
+          <p className="font-semibold">Display 2</p>
+          <p>{calculatedValues.display2}</p>
+        </div>
+        <div className="bg-gray-200 p-2 rounded">
+          <p className="font-semibold">Display 3</p>
+          <p>{calculatedValues.display3}</p>
+        </div>
+        <div className="bg-gray-200 p-2 rounded">
+          <p className="font-semibold">Current Fuel</p>
+          <p>{useMaxFuel ? 'Max Fuel' : 'Min Fuel'}: {useMaxFuel ? fuelData.maxFuel : fuelData.minFuel}</p>
+        </div>
+      </div>
+
+      {/* Row with 1 column */}
+      <div className="bg-teal-200 p-2 rounded">
+        <p className="font-semibold">Gate</p>
+        <p>{gateNumber}</p>
+      </div>
     </div>
   );
 };

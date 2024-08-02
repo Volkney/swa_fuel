@@ -2,10 +2,7 @@ import FuelCalculator from './logic/fuel-calculation'; // Adjust the path as nec
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Fuel Ticket Extension</h1>
-      </header>
+    <div className="w-[400px] min-h-screen p-4">
       <main>
         <FuelCalculator />
       </main>
