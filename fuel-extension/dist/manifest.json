@@ -8,13 +8,21 @@
   },
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ],
   "host_permissions": [
    "https://*/*",
-   "http://*/*"
+   "http://*/*",
+    "<all_urls>"
   ],
   "icons": {
     "32": "icon32.png"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["index.js"]
+    }
+  ]
 }
