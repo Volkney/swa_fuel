@@ -80,7 +80,6 @@ const FuelCalculator = () => {
 
   return (
     <div className="w-full min-w-[300px] max-w-[600px] p-4 bg-gray-100">
-      <h2 className="text-2xl font-bold mb-4">Fuel Calculator</h2>
       
       {/* Row with 4 columns */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">

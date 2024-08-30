@@ -12,17 +12,10 @@
     "storage"
   ],
   "host_permissions": [
-   "https://*/*",
-   "http://*/*",
-    "<all_urls>"
+   "http://oppssuitemain.swacorp.com",
+   "https://oppssuitemain.swacorp.com"
   ],
   "icons": {
     "32": "icon32.png"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["index.js"]
-    }
-  ]
+  }
 }
