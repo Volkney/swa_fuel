@@ -6,7 +6,6 @@ Simple form that updates values based on user input and the selection of type of
 
 ![Alt Text](./images/demoing.gif)
 ## Live Demo: [Fuel Calculator](https://volkney.github.io/swa_fuel)
-# Live Demo
 
 ---
 
