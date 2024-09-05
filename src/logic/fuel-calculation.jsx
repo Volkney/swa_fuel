@@ -1,38 +1,49 @@
 import { useState, useEffect } from 'react';
+import mockData from '../mockData'
 
 const FuelCalculator = () => {
-  const [fuelData, setFuelData] = useState({ minFuel: 0, maxFuel: 0 });
+  const [fuelData, setFuelData] = useState({ minFuel: '', maxFuel: '' });
   const [useMaxFuel, setUseMaxFuel] = useState(true);
   const [aircraftData, setAircraftData] = useState({ type: '', registry: '' });
   const [dateData, setDateData] = useState('');
   const [flightData, setFlightData] = useState({ number: '', origin: '', destination: '' });
-  const [gateNumber, setGateNumber] = useState(0);
-  const [calculatedValues, setCalculatedValues] = useState({ display1: 0, display2: 0, display3: 0 });
+  const [gateNumber, setGateNumber] = useState('');
+  const [calculatedValues, setCalculatedValues] = useState({ display1: '', display2: '', display3: '' });
 
   const MAX_800_AC = 8500;
   const NON_MAX_AC = 8600;
 
   useEffect(() => {
-    const scrapeData = async () => {
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.scripting.executeScript({
-          target: { tabId: tabs[0].id },
-          function: performScraping,
-        }, (results) => {
-          if (results && results[0].result) {
-            const scrapedData = results[0].result;
-            setFuelData(scrapedData.fuelData);
-            setAircraftData(scrapedData.aircraftData);
-            setDateData(scrapedData.dateData);
-            setFlightData(scrapedData.flightNumberData);
-            setGateNumber(scrapedData.gateData);
-            chrome.storage.local.set({scrapedData: scrapedData});
-          }
+    const fetchData = async () => {
+      if (typeof chrome !== 'undefined' && chrome.tabs && chrome.scripting) {
+        // Chrome extension environment
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.scripting.executeScript({
+            target: { tabId: tabs[0].id },
+            function: performScraping,
+          }, (results) => {
+            if (results && results[0].result) {
+              const scrapedData = results[0].result;
+              setFuelData(scrapedData.fuelData);
+              setAircraftData(scrapedData.aircraftData);
+              setDateData(scrapedData.dateData);
+              setFlightData(scrapedData.flightNumberData);
+              setGateNumber(scrapedData.gateData);
+              chrome.storage.local.set({scrapedData: scrapedData});
+            }
+          });
         });
-      });
+      } else {
+        // Non-Chrome extension environment (e.g., Vite development server)
+        setFuelData(mockData.fuel);
+        setAircraftData(mockData.aircraft);
+        setDateData(mockData.date);
+        setFlightData(mockData.flight);
+        setGateNumber(mockData.gate);
+      }
     };
 
-    scrapeData();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -40,7 +51,7 @@ const FuelCalculator = () => {
   }, [fuelData, useMaxFuel, aircraftData]);
 
   const calculateFuel = () => {
-    const fuelAmount = useMaxFuel ? fuelData.maxFuel : fuelData.minFuel;
+    const fuelAmount = useMaxFuel ? Number(fuelData.maxFuel) : Number(fuelData.minFuel);
     let display1, display2, display3;
 
     if (aircraftData.type.includes('MAX')) {
@@ -79,251 +90,121 @@ const FuelCalculator = () => {
   };
 
   return (
-    <div className="w-full min-w-[300px] max-w-[600px] p-4 bg-gray-100">
+    <div className="font-sans max-w-[600px] mx-auto p-5 bg-[#ffffc9] border-2 border-black">
+      <h1 className="text-lg font-bold text-center mb-5">SOUTHWEST AIRLINES FUEL TICKET</h1>
       
-      {/* Row with 4 columns */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-        <div className="bg-blue-200 p-2 rounded">
-          <p className="font-semibold">Station</p>
-          <p>{flightData.origin}</p>
+        <div>
+          <label className="text-xs font-bold">STATION</label>
+          <p className="border border-black bg-white p-3 text-xs h-[37px]">{flightData.origin}</p>
         </div>
-        <div className="bg-green-200 p-2 rounded">
-          <p className="font-semibold">Flight #</p>
-          <p>{flightData.number}</p>
+        <div>
+          <label className="text-xs font-bold">FLIGHT NO</label>
+          <p className="border border-black bg-white p-3 text-xs h-[37px]">{flightData.number}</p>
         </div>
-        <div className="bg-yellow-200 p-2 rounded">
-          <p className="font-semibold">Aircraft</p>
-          <p>{aircraftData.registry}</p>
+        <div>
+          <label className="text-xs font-bold">TAIL NO</label>
+          <p className="border border-black bg-white p-3 text-xs h-[37px]">{aircraftData.registry}</p>
         </div>
-        <div className="bg-red-200 p-2 rounded">
-          <p className="font-semibold">Date</p>
-          <p>{dateData}</p>
+        <div>
+          <label className="text-xs font-bold">DATE</label>
+          <p className="border border-black bg-white p-3 text-xs h-[37px]">{dateData}</p>
         </div>
       </div>
 
-      {/* Row with 2 columns */}
       <div className="grid grid-cols-2 gap-2 mb-4">
-        <div className="bg-purple-200 p-2 rounded">
-          <p className="font-semibold">Min Fuel</p>
-          <p>{fuelData.minFuel}</p>
+        <div>
+          <label className="text-xs font-bold">MIN. FUEL</label>
+          <p className="border border-black bg-white p-3 text-xs h-[37px]">{fuelData.minFuel}</p>
         </div>
-        <div className="bg-indigo-200 p-2 rounded">
-          <p className="font-semibold">Max Fuel</p>
-          <p>{fuelData.maxFuel}</p>
-        </div>
-      </div>
-
-      {/* Column with 5 rows */}
-      <div className="grid grid-cols-1 gap-2 mb-4">
-        <div className="bg-gray-200 p-2 rounded">
-          <button 
-            onClick={toggleFuelType}
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-          >
-            Toggle to {useMaxFuel ? 'Min Fuel' : 'Max Fuel'}
-          </button>
-        </div>
-        <div className="bg-gray-200 p-2 rounded">
-          <p className="font-semibold">Display 1</p>
-          <p>{calculatedValues.display1}</p>
-        </div>
-        <div className="bg-gray-200 p-2 rounded">
-          <p className="font-semibold">Display 2</p>
-          <p>{calculatedValues.display2}</p>
-        </div>
-        <div className="bg-gray-200 p-2 rounded">
-          <p className="font-semibold">Display 3</p>
-          <p>{calculatedValues.display3}</p>
-        </div>
-        <div className="bg-gray-200 p-2 rounded">
-          <p className="font-semibold">Current Fuel</p>
-          <p>{useMaxFuel ? 'Max Fuel' : 'Min Fuel'}: {useMaxFuel ? fuelData.maxFuel : fuelData.minFuel}</p>
+        <div>
+          <label className="text-xs font-bold">MAX.</label>
+          <p className="border border-black bg-white p-3 text-xs h-[37px]">{fuelData.maxFuel}</p>
         </div>
       </div>
 
-      {/* Row with 1 column */}
-      <div className="bg-teal-200 p-2 rounded">
-        <p className="font-semibold">Gate</p>
-        <p>{gateNumber}</p>
+      <div className="mb-4">
+        <label className="text-xs font-bold">PLANNED FUEL</label>
+        <p className="border border-black bg-white p-3 text-xs h-[37px]">
+          {useMaxFuel ? fuelData.maxFuel : fuelData.minFuel}
+        </p>
+      </div>
+
+      <div className="mb-4">
+        <label className="text-xs font-bold">FUEL TYPE</label>
+        <div className="flex items-center mt-1">
+          <input type="checkbox" id="jet-a" checked disabled className="mr-1" />
+          <label htmlFor="jet-a" className="text-xs">JET A</label>
+        </div>
+        <div className="flex items-center mt-1">
+          <input type="checkbox" id="other" disabled className="mr-1" />
+          <label htmlFor="other" className="text-xs">OTHER</label>
+        </div>
+      </div>
+
+      <table className="w-full border-collapse mt-4">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border border-black p-3 text-xs font-bold text-left">TANKS</th>
+            <th className="border border-black p-3 text-xs font-bold text-left">ARRIVAL FOB</th>
+            <th className="border border-black p-3 text-xs font-bold text-left">PLANNED FUEL</th>
+            <th className="border border-black p-3 text-xs font-bold text-left">DEPARTURE FOB</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="border border-black p-3 text-xs">ONE</td>
+            <td className="border border-black p-3 text-xs"></td>
+            <td className="border border-black p-3 text-xs">{calculatedValues.display1}</td>
+            <td className="border border-black p-3 text-xs"></td>
+          </tr>
+          <tr>
+            <td className="border border-black p-3 text-xs">TWO</td>
+            <td className="border border-black p-3 text-xs"></td>
+            <td className="border border-black p-3 text-xs">{calculatedValues.display2}</td>
+            <td className="border border-black p-3 text-xs"></td>
+          </tr>
+          <tr>
+            <td className="border border-black p-3 text-xs">CENTER</td>
+            <td className="border border-black p-3 text-xs"></td>
+            <td className="border border-black p-3 text-xs">{calculatedValues.display3}</td>
+            <td className="border border-black p-3 text-xs"></td>
+          </tr>
+          <tr>
+            <td className="border border-black p-3 text-xs">TOTAL</td>
+            <td className="border border-black p-3 text-xs"></td>
+            <td className="border border-black p-3 text-xs">
+              {calculatedValues.display1 && calculatedValues.display2 && calculatedValues.display3
+                ? (Number(calculatedValues.display1) + Number(calculatedValues.display2) + Number(calculatedValues.display3)).toString()
+                : ''}
+            </td>
+            <td className="border border-black p-3 text-xs"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div className="flex justify-between mt-4">
+        <div>
+          <label className="text-xs font-bold">EQUIPMENT NO.</label>
+          <p className="border border-black bg-white p-3 text-xs h-[37px]"></p>
+        </div>
+        <div>
+          <label className="text-xs font-bold">GATE NO.</label>
+          <p className="border border-black bg-white p-3 text-xs h-[37px]">{gateNumber}</p>
+        </div>
+      </div>
+
+      {/* Toggle button added at the bottom */}
+      <div className="mt-4">
+        <button 
+          onClick={toggleFuelType}
+          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+        >
+          Toggle to {useMaxFuel ? 'Min Fuel' : 'Max Fuel'}
+        </button>
       </div>
     </div>
   );
 };
-
-// This function will be stringified and executed in the context of the web page
-function performScraping() {
-  function getAircraftData() {
-    return new Promise((resolve) => {
-      let divs = document.querySelectorAll('div');
-      let divsArray = Array.from(divs);
-  
-      // Define a pattern to match "Aircraft Type:<type> Registry:<registry>"
-      let pattern = /Aircraft Type:(.+?)Registry:(\w+)/i;
-  
-      // Find the div that matches the pattern
-      let matchingDiv = divsArray.find(div => pattern.test(div.textContent.trim()));
-  
-      if (matchingDiv) {
-         // Get the text content of the matching div
-         let matchingString = matchingDiv.textContent.trim();
-  
-         // Extract aircraft type and registry from the matching string
-         let match = matchingString.match(pattern);
-  
-         if (match) {
-             let aircraftType = match[1].trim();
-             let registry = match[2];
-  
-             console.log('Aircraft Type:', aircraftType);
-             console.log('Registry:', registry);
-             resolve({ type: aircraftType, registry: registry });
-         } else {
-             console.log('Pattern not matched');
-             resolve({ type: '', registry: '' });
-         }
-      } else {
-         console.log('No div matching the pattern found');
-         resolve({ type: '', registry: '' });
-      }
-    });
-  }
-
-  function getDateData() {
-    return new Promise((resolve) => {
-      let divs = document.querySelectorAll('div');
-      let divsArray = Array.from(divs);
-  
-      // Define a pattern to match "Date:MM/DD/YYYY"
-      let datePattern = /Date:(\d{2})\/(\d{2})\/\d{4}/i;
-  
-      // Find the div that matches the pattern
-      let dateDiv = divsArray.find(div => datePattern.test(div.textContent.trim()));
-  
-      if (dateDiv) {
-         // Extract date string from the div
-         let dateMatch = dateDiv.textContent.trim().match(datePattern);
-         if (dateMatch) {
-             let month = dateMatch[1].trim(); // Extract month (group 1)
-             let day = dateMatch[2].trim();   // Extract day (group 2)
-  
-             let monthDay = `${month}/${day}`;
-             console.log('Date: ', monthDay);
-             resolve(monthDay);
-         } else {
-             console.log('Date pattern not matched');
-             resolve('');
-         }
-      } else {
-         console.log('No div with Date information found');
-         resolve('');
-      }
-    });
-  }
-
-  function getFlightNumberData() {
-    return new Promise((resolve) => {
-      let divs = document.querySelectorAll('div');
-      let divsArray = Array.from(divs);
-  
-      // Define a pattern to match "PrePlan - Flight <flight_number> <origin> - <destination>"
-      let pattern = /PrePlan - Flight (\d+) (\w{3}) - (\w{3})/i;
-  
-      // Find the div that matches the pattern
-      let matchingDiv = divsArray.find(div => pattern.test(div.textContent.trim()));
-  
-      if (matchingDiv) {
-         // Get the text content of the matching div
-         let matchingString = matchingDiv.textContent.trim();
-  
-         // Extract flight number, origin, and destination from the matching string
-         let match = matchingString.match(pattern);
-  
-         if (match) {
-             let flightNumber = match[1];
-             let origin = match[2];
-             let destination = match[3];
-  
-             console.log('Flight Number:', flightNumber);
-             console.log('Origin:', origin);
-             console.log('Destination:', destination);
-             resolve({ number: flightNumber, origin, destination });
-         } else {
-             console.log('Pattern not matched');
-             resolve({ number: '', origin: '', destination: '' });
-         }
-      } else {
-         console.log('No div matching the pattern found');
-         resolve({ number: '', origin: '', destination: '' });
-      }
-    });
-  }
-
-  function getFuelData() {
-    return new Promise((resolve) => {
-      let fuel = document.querySelectorAll('div')
-      let fuelArray =  Array.from(fuel)
-      let patternForFindingFuelAmount = /^\s*\d+\s*MIN FUEL\s*-\s*\d+\s*MAX FUEL\s*$/i
-      let divsMatchingExactPattern = fuelArray.filter(div => patternForFindingFuelAmount.test(div.textContent.trim()))
-      let matchingString = divsMatchingExactPattern[0].textContent
-      let patterForMatchingString = /(\d+)\s*MIN FUEL\s*-\s*(\d+)\s*MAX FUEL/i
-      let match = matchingString.match(patterForMatchingString)
-      let minFuel, maxFuel
-      if(match) {
-         minFuel = match[1]
-         maxFuel = match[2]
-  
-         minFuel = Number(minFuel)
-         maxFuel = Number(maxFuel)
-  
-         console.log('min fuel: ', minFuel)
-         console.log('max fuel: ', maxFuel)
-         resolve({ minFuel, maxFuel });
-      } else {
-         console.log('Pattern not matched')
-         resolve({ minFuel: 0, maxFuel: 0 });
-      }
-    });
-  }
-
-  function getGateData() {
-    return new Promise((resolve) => {
-      let divs = document.querySelectorAll('div');
-      let divsArray = Array.from(divs);
-  
-      // Define a pattern to match "Gate:<number>"
-      let gatePattern = /Gate:(\d+)/i;
-  
-      // Find the div that matches the pattern
-      let gateDiv = divsArray.find(div => gatePattern.test(div.textContent.trim()));
-  
-      if (gateDiv) {
-         // Extract gate number from the div and convert to number
-         let gateMatch = gateDiv.textContent.trim().match(gatePattern);
-         if (gateMatch) {
-             let gateNumber = parseInt(gateMatch[1].trim(), 10); // Convert to number
-             console.log('Gate Number:', gateNumber);
-             resolve(gateNumber);
-         } else {
-             console.log('Gate pattern not matched');
-             resolve(0);
-         }
-      } else {
-         console.log('No div with Gate information found');
-         resolve(0);
-      }
-    });
-  }
-
-  // Execute all scraping functions and return the results
-  return Promise.all([
-    getAircraftData(),
-    getDateData(),
-    getFlightNumberData(),
-    getFuelData(),
-    getGateData()
-  ]).then(([aircraftData, dateData, flightNumberData, fuelData, gateData]) => {
-    return { aircraftData, dateData, flightNumberData, fuelData, gateData };
-  });
-}
 
 export default FuelCalculator;
