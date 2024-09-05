@@ -34,7 +34,6 @@ const FuelCalculator = () => {
           });
         });
       } else {
-        // Non-Chrome extension environment (e.g., Vite development server)
         setFuelData(mockData.fuel);
         setAircraftData(mockData.aircraft);
         setDateData(mockData.date);
@@ -153,32 +152,32 @@ const FuelCalculator = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="border border-black p-3 text-xs">ONE</td>
-            <td className="border border-black p-3 text-xs"></td>
-            <td className="border border-black p-3 text-xs">{calculatedValues.display1}</td>
-            <td className="border border-black p-3 text-xs"></td>
+            <td className=" border border-black p-3 text-xs">ONE</td>
+            <td className="bg-white border border-black p-3 text-xs"></td>
+            <td className="bg-white border border-black p-3 text-xs">{calculatedValues.display1}</td>
+            <td className="bg-white border border-black p-3 text-xs"></td>
           </tr>
           <tr>
-            <td className="border border-black p-3 text-xs">TWO</td>
-            <td className="border border-black p-3 text-xs"></td>
-            <td className="border border-black p-3 text-xs">{calculatedValues.display2}</td>
-            <td className="border border-black p-3 text-xs"></td>
+            <td className=" border border-black p-3 text-xs">TWO</td>
+            <td className="bg-white border border-black p-3 text-xs"></td>
+            <td className="bg-white border border-black p-3 text-xs">{calculatedValues.display2}</td>
+            <td className="bg-white border border-black p-3 text-xs"></td>
           </tr>
           <tr>
-            <td className="border border-black p-3 text-xs">CENTER</td>
-            <td className="border border-black p-3 text-xs"></td>
-            <td className="border border-black p-3 text-xs">{calculatedValues.display3}</td>
-            <td className="border border-black p-3 text-xs"></td>
+            <td className=" border border-black p-3 text-xs">CENTER</td>
+            <td className="bg-white border border-black p-3 text-xs"></td>
+            <td className="bg-white border border-black p-3 text-xs">{calculatedValues.display3}</td>
+            <td className="bg-white border border-black p-3 text-xs"></td>
           </tr>
           <tr>
-            <td className="border border-black p-3 text-xs">TOTAL</td>
-            <td className="border border-black p-3 text-xs"></td>
-            <td className="border border-black p-3 text-xs">
+            <td className=" border border-black p-3 text-xs">TOTAL</td>
+            <td className="bg-white border border-black p-3 text-xs"></td>
+            <td className="bg-white border border-black p-3 text-xs">
               {calculatedValues.display1 && calculatedValues.display2 && calculatedValues.display3
                 ? (Number(calculatedValues.display1) + Number(calculatedValues.display2) + Number(calculatedValues.display3)).toString()
                 : ''}
             </td>
-            <td className="border border-black p-3 text-xs"></td>
+            <td className="bg-white border border-black p-3 text-xs"></td>
           </tr>
         </tbody>
       </table>
