@@ -195,7 +195,6 @@ const FuelCalculator = () => {
       <div className="flex justify-between mt-4">
         <div>
           <label className="text-xs font-bold">EQUIPMENT NO.</label>
-          <p className="border border-black bg-white p-3 text-xs h-[37px]"></p>
         </div>
         <div>
           <label className="text-xs font-bold">GATE NO.</label>
