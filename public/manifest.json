@@ -1,31 +1,21 @@
 {
-    "manifest_version": 3,
-    "name": "Fuel Calculator",
-    "version": "1.0.0",
-    "description": "A simple fuel calculator extension",
-    "permissions": [
-        "tabs",
-        "activeTab",
-        "background"
-    ],
-    "host_permission": [
-        "http://*/*",
-        "https://*/*"
-    ],
-    "background": {
-        "scripts": ["background.js"],
-        "persistent": false
-    },
-    "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "js": ["content.js"]
-        }
-    ],
-    "browser_action": {
-        "default_popup": "popup.html",
-        "default_icon": {
-            "tank-truck": "tank-truck.png"
-        }
-    }
+  "manifest_version": 3,
+  "name": "Fuel Ticket Extension",
+  "version": "1.0.0",
+  "description": "A fuel ticket calculator extension",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+   "http://oppssuitemain.swacorp.com",
+   "https://oppssuitemain.swacorp.com"
+  ],
+  "icons": {
+    "32": "icon32.png"
+  }
 }
