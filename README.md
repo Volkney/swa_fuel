@@ -1,8 +1,28 @@
-# React + Vite
+### For Users
+1. Download the extension package (when available)
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable "Developer mode" in the top right corner
+4. Click "Load unpacked" and select the downloaded extension folder (dist folder)
+5. The Fuel Calculator extension should now appear in your Chrome toolbar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+## Technology Stack
+- React
+- Vite
+- Tailwind CSS
+- Chrome Extension APIs
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Development
+This project uses Vite. Key commands:
+
+- `npm run dev`: Start the development server
+- `npm run build`: Build the project for production
+
+## Testing
+The application includes mock data for testing in non-Chrome environments. To modify test scenarios, edit the `mockData.js` file in the `src` directory.
+
+
+## Contact
+Jorge Tinoco - jorge.tinoco@wnco.com
+
+Project Link: [https://github.com/Volkney/swa_fuel/tree/vite-fuel-extension](https://github.com/Volkney/swa_fuel/tree/vite-fuel-extension)
