@@ -50,18 +50,27 @@ const FuelCalculator = () => {
       return new Promise((resolve) => {
         let divs = document.querySelectorAll('div');
         let divsArray = Array.from(divs);
+  
+        // Define a pattern to match "Aircraft Type:<type> Registry:<registry>"
         let pattern = /Aircraft Type:(.+?)Registry:(\w+)/i;
+  
+        // Find the div that matches the pattern
         let matchingDiv = divsArray.find(div => pattern.test(div.textContent.trim()));
+  
         if (matchingDiv) {
+          // Get the text content of the matching div
           let matchingString = matchingDiv.textContent.trim();
+  
+          // Extract aircraft type and registry from the matching string
           let match = matchingString.match(pattern);
+  
           if (match) {
             let aircraftType = match[1].trim();
             let registry = match[2];
-            let aircraftTypeNumbers = aircraftType.replace(/\D/g, '');
-            console.log('Aircraft Type (numbers only):', aircraftTypeNumbers);
+  
+            console.log('Aircraft Type:', aircraftType);
             console.log('Registry:', registry);
-            resolve({ type: aircraftTypeNumbers, registry: registry });
+            resolve({ type: aircraftType, registry: registry });
           } else {
             console.log('Pattern not matched');
             resolve({ type: '', registry: '' });
@@ -72,6 +81,7 @@ const FuelCalculator = () => {
         }
       });
     }
+  
 
     function getDateData() {
       return new Promise((resolve) => {
@@ -189,43 +199,43 @@ const FuelCalculator = () => {
     calculateFuel();
   }, [fuelData, useMaxFuel, aircraftData]);
 
-  const calculateFuel = () => {
-    const fuelAmount = useMaxFuel ? fuelData.maxFuel : fuelData.minFuel;
-    let display1, display2, display3;
-  
-    // Check if the aircraft type is a MAX (700 or 800)
-    const isMaxAircraft = aircraftData.type === '7' || aircraftData.type === '8';
-  
-    if (isMaxAircraft) {
-      if (fuelAmount < 17000) {
-        const dividedValue = fuelAmount / 2;
-        display1 = Math.ceil(dividedValue);
-        display2 = Math.floor(dividedValue);
-        display3 = 0;
-      } else {
-        display1 = MAX_800_AC;
-        display2 = MAX_800_AC;
-        display3 = fuelAmount - (MAX_800_AC * 2);
-      }
+const calculateFuel = () => {
+  const fuelAmount = useMaxFuel ? fuelData.maxFuel : fuelData.minFuel;
+  let display1, display2, display3;
+
+  // Check if the aircraft type is a MAX (700 or 800)
+  const isMaxAircraft = aircraftData.type === '7' || aircraftData.type === '8';
+
+  if (isMaxAircraft) {
+    if (fuelAmount < 17000) {
+      const dividedValue = fuelAmount / 2;
+      display1 = Math.ceil(dividedValue);
+      display2 = Math.floor(dividedValue);
+      display3 = 0;
     } else {
-      if (fuelAmount < 17200) {
-        const dividedValue = fuelAmount / 2;
-        display1 = Math.ceil(dividedValue);
-        display2 = Math.floor(dividedValue);
-        display3 = 0;
-      } else {
-        display1 = NON_MAX_AC;
-        display2 = NON_MAX_AC;
-        display3 = fuelAmount - (NON_MAX_AC * 2);
-      }
+      display1 = MAX_800_AC;
+      display2 = MAX_800_AC;
+      display3 = fuelAmount - (MAX_800_AC * 2);
     }
-  
-    setCalculatedValues({ 
-      display1: display1.toFixed(0), 
-      display2: display2.toFixed(0), 
-      display3: display3.toFixed(0) 
-    });
-  };
+  } else {
+    if (fuelAmount < 17200) {
+      const dividedValue = fuelAmount / 2;
+      display1 = Math.ceil(dividedValue);
+      display2 = Math.floor(dividedValue);
+      display3 = 0;
+    } else {
+      display1 = NON_MAX_AC;
+      display2 = NON_MAX_AC;
+      display3 = fuelAmount - (NON_MAX_AC * 2);
+    }
+  }
+
+  setCalculatedValues({ 
+    display1: display1.toFixed(0), 
+    display2: display2.toFixed(0), 
+    display3: display3.toFixed(0) 
+  });
+};
 
   const toggleFuelType = () => {
     setUseMaxFuel(!useMaxFuel); 
