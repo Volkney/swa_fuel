@@ -1,10 +1,5 @@
 import { useState, useEffect } from 'react';
 import mockData from '../mockData';
-import { getAircraftData } from '../scrape-info/aircraft-data';
-import { getDateData } from '../scrape-info/date-data';
-import { getFlightNumberData } from '../scrape-info/flight-number-data';
-import { getFuelData } from '../scrape-info/fuel-data';
-import { getGateData } from '../scrape-info/gate-data';
 
 const FuelCalculator = () => {
   const [fuelData, setFuelData] = useState({ minFuel: 0, maxFuel: 0 });
@@ -51,6 +46,134 @@ const FuelCalculator = () => {
   }, []);
 
   function performScraping() {
+    function getAircraftData() {
+      return new Promise((resolve) => {
+        let divs = document.querySelectorAll('div');
+        let divsArray = Array.from(divs);
+        let pattern = /Aircraft Type:(.+?)Registry:(\w+)/i;
+        let matchingDiv = divsArray.find(div => pattern.test(div.textContent.trim()));
+        if (matchingDiv) {
+          let matchingString = matchingDiv.textContent.trim();
+          let match = matchingString.match(pattern);
+          if (match) {
+            let aircraftType = match[1].trim();
+            let registry = match[2];
+            let aircraftTypeNumbers = aircraftType.replace(/\D/g, '');
+            console.log('Aircraft Type (numbers only):', aircraftTypeNumbers);
+            console.log('Registry:', registry);
+            resolve({ type: aircraftTypeNumbers, registry: registry });
+          } else {
+            console.log('Pattern not matched');
+            resolve({ type: '', registry: '' });
+          }
+        } else {
+          console.log('No div matching the pattern found');
+          resolve({ type: '', registry: '' });
+        }
+      });
+    }
+
+    function getDateData() {
+      return new Promise((resolve) => {
+        let divs = document.querySelectorAll('div');
+        let divsArray = Array.from(divs);
+        let datePattern = /Date:(\d{2})\/(\d{2})\/\d{4}/i;
+        let dateDiv = divsArray.find(div => datePattern.test(div.textContent.trim()));
+        if (dateDiv) {
+          let dateMatch = dateDiv.textContent.trim().match(datePattern);
+          if (dateMatch) {
+            let month = dateMatch[1].trim();
+            let day = dateMatch[2].trim();
+            let monthDay = `${month}/${day}`;
+            console.log('Date: ', monthDay);
+            resolve(monthDay);
+          } else {
+            console.log('Date pattern not matched');
+            resolve('');
+          }
+        } else {
+          console.log('No div with Date information found');
+          resolve('');
+        }
+      });
+    }
+
+    function getFlightNumberData() {
+      return new Promise((resolve) => {
+        let divs = document.querySelectorAll('div');
+        let divsArray = Array.from(divs);
+        let pattern = /PrePlan - Flight (\d+) (\w{3}) - (\w{3})/i;
+        let matchingDiv = divsArray.find(div => pattern.test(div.textContent.trim()));
+        if (matchingDiv) {
+          let matchingString = matchingDiv.textContent.trim();
+          let match = matchingString.match(pattern);
+          if (match) {
+            let flightNumber = match[1];
+            let origin = match[2];
+            let destination = match[3];
+            console.log('Flight Number:', flightNumber);
+            console.log('Origin:', origin);
+            console.log('Destination:', destination);
+            resolve({ number: flightNumber, origin, destination });
+          } else {
+            console.log('Pattern not matched');
+            resolve({ number: '', origin: '', destination: '' });
+          }
+        } else {
+          console.log('No div matching the pattern found');
+          resolve({ number: '', origin: '', destination: '' });
+        }
+      });
+    }
+
+    function getFuelData() {
+      return new Promise((resolve) => {
+        let fuel = document.querySelectorAll('div')
+        let fuelArray =  Array.from(fuel)
+        let patternForFindingFuelAmount = /^\s*\d+\s*MIN FUEL\s*-\s*\d+\s*MAX FUEL\s*$/i
+        let divsMatchingExactPattern = fuelArray.filter(div => patternForFindingFuelAmount.test(div.textContent.trim()))
+        let matchingString = divsMatchingExactPattern[0].textContent
+        let patterForMatchingString = /(\d+)\s*MIN FUEL\s*-\s*(\d+)\s*MAX FUEL/i
+        let match = matchingString.match(patterForMatchingString)
+        let minFuel, maxFuel
+        if(match) {
+          minFuel = match[1]
+          maxFuel = match[2]
+          minFuel = Number(minFuel)
+          maxFuel = Number(maxFuel)
+          console.log('min fuel: ', minFuel)
+          console.log('max fuel: ', maxFuel)
+          resolve({ minFuel, maxFuel });
+        } else {
+          console.log('Pattern not matched')
+          resolve({ minFuel: 0, maxFuel: 0 });
+        }
+      });
+    }
+
+    function getGateData() {
+      return new Promise((resolve) => {
+        let divs = document.querySelectorAll('div');
+        let divsArray = Array.from(divs);
+        let gatePattern = /Gate:(\d+)/i;
+        let gateDiv = divsArray.find(div => gatePattern.test(div.textContent.trim()));
+        if (gateDiv) {
+          let gateMatch = gateDiv.textContent.trim().match(gatePattern);
+          if (gateMatch) {
+            let gateNumber = parseInt(gateMatch[1].trim(), 10);
+            console.log('Gate Number:', gateNumber);
+            resolve(gateNumber);
+          } else {
+            console.log('Gate pattern not matched');
+            resolve(0);
+          }
+        } else {
+          console.log('No div with Gate information found');
+          resolve(0);
+        }
+      });
+    }
+
     return Promise.all([
       getAircraftData(),
       getDateData(),
@@ -104,7 +227,6 @@ const FuelCalculator = () => {
   const toggleFuelType = () => {
     setUseMaxFuel(!useMaxFuel); 
   };
-
   return (
     <div className="font-sans max-w-[600px] mx-auto p-5 bg-[#ffffc9] border-2 border-black">
       <h1 className="text-lg font-bold text-center mb-3">SOUTHWEST AIRLINES FUEL TICKET</h1>
