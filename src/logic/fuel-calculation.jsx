@@ -7,21 +7,20 @@ import { getFuelData } from '../scrape-info/fuel-data';
 import { getGateData } from '../scrape-info/gate-data';
 
 const FuelCalculator = () => {
-  const [fuelData, setFuelData] = useState({ minFuel: '', maxFuel: '' });
+  const [fuelData, setFuelData] = useState({ minFuel: 0, maxFuel: 0 });
   const [useMaxFuel, setUseMaxFuel] = useState(true);
   const [aircraftData, setAircraftData] = useState({ type: '', registry: '' });
   const [dateData, setDateData] = useState('');
   const [flightData, setFlightData] = useState({ number: '', origin: '', destination: '' });
-  const [gateNumber, setGateNumber] = useState('');
-  const [calculatedValues, setCalculatedValues] = useState({ display1: '', display2: '', display3: '' });
+  const [gateNumber, setGateNumber] = useState(0);
+  const [calculatedValues, setCalculatedValues] = useState({ display1: 0, display2: 0, display3: 0 });
 
   const MAX_800_AC = 8500;
   const NON_MAX_AC = 8600;
 
   useEffect(() => {
-    const fetchData = async () => {
+    const scrapeData = async () => {
       if (typeof chrome !== 'undefined' && chrome.tabs && chrome.scripting) {
-        // Chrome extension environment
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
           chrome.scripting.executeScript({
             target: { tabId: tabs[0].id },
@@ -39,7 +38,7 @@ const FuelCalculator = () => {
           });
         });
       } else {
-        // Non-Chrome extension environment (e.g., Vite development server)
+        // Use mock data when not in Chrome extension environment
         setFuelData(mockData.fuel);
         setAircraftData(mockData.aircraft);
         setDateData(mockData.date);
@@ -47,30 +46,28 @@ const FuelCalculator = () => {
         setGateNumber(mockData.gate);
       }
     };
-  
-    fetchData();
+
+    scrapeData();
   }, []);
 
-    function performScraping() {
-      return Promise.all([
-        getAircraftData(),
-        getDateData(),
-        getFlightNumberData(),
-        getFuelData(),
-        getGateData()
-      ]).then(([aircraftData, dateData, flightNumberData, fuelData, gateData]) => {
-        return { aircraftData, dateData, flightNumberData, fuelData, gateData };
-      });
-    }
-  
-  
+  function performScraping() {
+    return Promise.all([
+      getAircraftData(),
+      getDateData(),
+      getFlightNumberData(),
+      getFuelData(),
+      getGateData()
+    ]).then(([aircraftData, dateData, flightNumberData, fuelData, gateData]) => {
+      return { aircraftData, dateData, flightNumberData, fuelData, gateData };
+    });
+  }
 
   useEffect(() => {
     calculateFuel();
   }, [fuelData, useMaxFuel, aircraftData]);
 
   const calculateFuel = () => {
-    const fuelAmount = useMaxFuel ? Number(fuelData.maxFuel) : Number(fuelData.minFuel);
+    const fuelAmount = useMaxFuel ? fuelData.maxFuel : fuelData.minFuel;
     let display1, display2, display3;
 
     if (aircraftData.type.includes('MAX')) {
