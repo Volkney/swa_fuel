@@ -192,8 +192,11 @@ const FuelCalculator = () => {
   const calculateFuel = () => {
     const fuelAmount = useMaxFuel ? fuelData.maxFuel : fuelData.minFuel;
     let display1, display2, display3;
-
-    if (aircraftData.type.includes('MAX')) {
+  
+    // Check if the aircraft type is a MAX (700 or 800)
+    const isMaxAircraft = aircraftData.type === '7' || aircraftData.type === '8';
+  
+    if (isMaxAircraft) {
       if (fuelAmount < 17000) {
         const dividedValue = fuelAmount / 2;
         display1 = Math.ceil(dividedValue);
@@ -202,7 +205,7 @@ const FuelCalculator = () => {
       } else {
         display1 = MAX_800_AC;
         display2 = MAX_800_AC;
-        display3 = fuelAmount - (MAX_800_AC + MAX_800_AC);
+        display3 = fuelAmount - (MAX_800_AC * 2);
       }
     } else {
       if (fuelAmount < 17200) {
@@ -213,10 +216,10 @@ const FuelCalculator = () => {
       } else {
         display1 = NON_MAX_AC;
         display2 = NON_MAX_AC;
-        display3 = fuelAmount - (NON_MAX_AC + NON_MAX_AC);
+        display3 = fuelAmount - (NON_MAX_AC * 2);
       }
     }
-
+  
     setCalculatedValues({ 
       display1: display1.toFixed(0), 
       display2: display2.toFixed(0), 
