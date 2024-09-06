@@ -204,7 +204,7 @@ const calculateFuel = () => {
   let display1, display2, display3;
 
   // Check if the aircraft type is a MAX (700 or 800)
-  const isMaxAircraft = aircraftData.type === '7' || aircraftData.type === '8';
+  const isMaxAircraft = aircraftData.type.includes('(MAX)');
 
   if (isMaxAircraft) {
     if (fuelAmount < 17000) {
